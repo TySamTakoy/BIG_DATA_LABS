@@ -1,2 +1,17 @@
-# BIG_DATA_LABS
-big data labs
+#BIG DATA LABS
+
+## LAB_1
+
+Реализовать анализ данных при помощи MapReduce
+
+## LAB_2
+
+Решить ту же задачу через Apache Hadoop (Pig, Hive и тп)
+
+## LAB_3
+
+Реализовать алгоритм PageRank при помощи Apache Spark. Посчитать ранг предустановленного перечня интернет страниц (не более 2х уровней вложенности)
+
+## LAB_4
+
+Использовать витрину данных (Apache Airflow, Apache Nifi, AWS Step functions, Luigi, Apache Camel, ...) для формирования цепочки заданий для периодического запуска PageRank и представления данных в удобном для пользователя виде
