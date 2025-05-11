@@ -1,0 +1,131 @@
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+      TZ: UTC
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    networks:
+      - airflow_network
+
+  airflow-init:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow-init
+    image: custom/airflow-init:latest
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: my_secret_key_123
+      TZ: UTC
+    command: >
+      bash -c "
+        airflow db migrate &&
+        airflow users create --username airflow --password airflow --firstname Air --lastname Flow --role Admin --email airflow@example.com
+      "
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./script:/opt/airflow/scripts
+      - ./logs:/opt/airflow/logs
+      - ./data:/opt/airflow/data
+    networks:
+      - airflow_network
+
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__WEBSERVER__RBAC: 'True'
+      AIRFLOW__WEBSERVER__SECRET_KEY: my_secret_key_123
+      AIRFLOW__WEBSERVER__WEB_SERVER_USER: airflow
+      AIRFLOW__WEBSERVER__WEB_SERVER_PASSWORD: airflow
+      TZ: UTC
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./script:/opt/airflow/scripts
+      - ./logs:/opt/airflow/logs
+      - ./data:/opt/airflow/data
+    ports:
+      - "8080:8080"
+    command: webserver
+    restart: always
+    networks:
+      - airflow_network
+
+  airflow-scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__WEBSERVER__SECRET_KEY: my_secret_key_123
+      TZ: UTC
+    command: scheduler
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./script:/opt/airflow/scripts
+      - ./logs:/opt/airflow/logs
+      - ./data:/opt/airflow/data
+    restart: always
+    networks:
+      - airflow_network
+
+  airflow-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: my_secret_key_123
+      TZ: UTC
+    command: worker
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./script:/opt/airflow/scripts
+      - ./logs:/opt/airflow/logs
+      - ./data:/opt/airflow/data
+    networks:
+      - airflow_network
+
+  spark-master:
+    image: bitnami/spark:latest
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - TZ=UTC
+    ports:
+      - "7077:7077"
+      - "8081:8080"
+    networks:
+      - airflow_network
+
+  spark-worker:
+    image: bitnami/spark:latest
+    container_name: spark-worker
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - TZ=UTC
+    networks:
+      - airflow_network
+
+volumes:
+  postgres_db:
+
+networks:
+  airflow_network:
