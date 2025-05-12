@@ -1,5 +1,7 @@
 # LAB_4
 
+# Видео пояснение - https://drive.google.com/file/d/1lFl6cPLC1yeHijvos--G4v9bKz_6CSjA/view?usp=drive_link
+
 # Использование витрины данных Apache Airflow для формирования цепочки заданий для периодического запуска PageRank (из LAB_3) и представление данных в удобном для пользователя виде (csv & html)
 
 ## Структура проекта
