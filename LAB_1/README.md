@@ -1,4 +1,7 @@
   # Lab_1
+  
+  # Видео пояснение - https://drive.google.com/file/d/1sWhvky3B2eP5mKR0KZDHO9ccxLV5qMCv/view?usp=drive_link
+  
 MapReduce для набора данных ('onlinefraud.csv')
 
 Url исходного файла: https://www.kaggle.com/datasets/jainilcoder/online-payment-fraud-detection?resource=download
