@@ -2,6 +2,8 @@
   
   # РЕШЕНИЕ (в Google Collab) - https://colab.research.google.com/drive/1BD_F-yAWKpeUKyGrEGeO3JUrUXpo7lOl#scrollTo=b5kMRG-JKJNN
 
+  # Видео пояснение - https://drive.google.com/file/d/1FNO1J6A2nero1YZXrgol9vjjgVZ3ZGaJ/view?usp=drive_link
+
 MapReduce для набора данных ('onlinefraud.csv') через Apache Hadoop
 
 Url исходного файла: https://www.kaggle.com/datasets/jainilcoder/online-payment-fraud-detection?resource=download
