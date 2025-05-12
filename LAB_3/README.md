@@ -1,5 +1,8 @@
 # LAB_3
+
 # РЕШЕНИЕ в Google Collab - https://colab.research.google.com/drive/14_7B-xBjW7ZkSq9oSJ_AVuPziG4WO2Zu?usp=sharing
+
+# Видео пояснение - https://drive.google.com/file/d/1Z0sgNEEEa5PAL561JKiTqpb7PaBjoKTu/view?usp=drive_link
 
 Реализация алгоритма **PageRank** с использованием **Apache Spark** и многопоточного краулера на Python. 
 
